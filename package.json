@@ -1,0 +1,55 @@
+{
+  "name": "@gct256/sitetool-app",
+  "version": "1.0.0",
+  "description": "sitetool frontend",
+  "scripts": {
+    "watch": "cross-env NODE_ENV=development webpack --watch",
+    "build": "cross-env NODE_ENV=production webpack",
+    "app": "electron app",
+    "prepackage": "npm run build",
+    "package": "node scripts/package.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gct256/sitetool-app.git"
+  },
+  "author": "gct256+github@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gct256/sitetool-app/issues"
+  },
+  "homepage": "https://github.com/gct256/sitetool-app#readme",
+  "dependencies": {
+    "@gct256/sitetool": "^1.4.0",
+    "bulma": "^0.7.1",
+    "electron": "^2.0.8",
+    "qrcode.react": "^0.8.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^5.10.0",
+    "redux-persist-electron-storage": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.4.11",
+    "@types/react-dom": "^16.0.7",
+    "@types/react-redux": "^6.0.6",
+    "@types/redux-logger": "^3.0.6",
+    "@types/redux-persist": "^4.3.1",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "electron-packager": "^12.1.1",
+    "node-sass": "^4.9.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.22.1",
+    "ts-loader": "^4.5.0",
+    "tslint": "^5.11.0",
+    "tslint-microsoft-contrib": "^5.2.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.0.1",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
+  }
+}

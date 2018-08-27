@@ -1,0 +1,34 @@
+$green: #00b67f;
+$desktop: 0;
+
+@import 'bulma';
+
+th,
+td {
+  white-space: nowrap;
+}
+
+.message-modal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.message-animation .button {
+  background-color: transparent;
+  border: 0;
+}
+
+.message-message {
+  margin-top: 2rem;
+  color: $white;
+}
+
+.file-path,
+.log-view-item {
+  font-family: 'Menlo', 'Consolas', monospace;
+}
+
+.recent-file-list-item .file-path {
+  margin-bottom: 0.5rem;
+}

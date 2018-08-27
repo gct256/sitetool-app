@@ -1,0 +1,11 @@
+{
+  "name": "sitetool-app",
+  "productName": "Sitetool",
+  "version": "1.0.0",
+  "author": "gct256+github@gmail.com",
+  "license": "MIT",
+  "main": "main.js",
+  "dependencies": {
+    "@gct256/sitetool": "^1.4.0"
+  }
+}
