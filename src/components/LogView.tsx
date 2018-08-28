@@ -11,12 +11,14 @@ function mapStateToProps(state: AppState) {
   };
 }
 
-type Props = ReturnType<typeof mapStateToProps>;
+type Props = ReturnType<typeof mapStateToProps> & {
+  limit: number;
+};
 
 class LogViewClass extends React.Component<Props> {
   public render() {
-    const { logs } = this.props;
-    const reverseLogs = logs.slice(-200);
+    const { logs, limit } = this.props;
+    const reverseLogs = logs.slice(-limit);
     reverseLogs.reverse();
     const children = reverseLogs.map((log: Log) => (
       <LogViewItem key={log.time} log={log} />

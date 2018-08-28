@@ -129,7 +129,7 @@ class RunningClass extends React.Component<Props> {
             </tbody>
           </table>
         </div>
-        <LogView />
+        <LogView limit={100} />
       </div>
     );
   }
