@@ -3,8 +3,8 @@ import {
   FileEvent,
   Runtime,
   RuntimeEvent,
-  ServerStartedEvent
-  // TransformEvent
+  ServerStartedEvent,
+  TransformEvent
 } from '@gct256/sitetool';
 import * as fs from 'fs';
 import { applyMiddleware, createStore } from 'redux';
@@ -193,7 +193,15 @@ runtime.on('WRITE_FILE', (event: FileEvent) => {
 });
 
 // SKIP_FILE: FileEvent;
-// TRANSFORM: TransformEvent;
+runtime.on('TRANSFORM', (event: TransformEvent) => {
+  if (event.error !== false) {
+    store.dispatch(logs.addError(event.error));
+  } else {
+    store.dispatch(
+      logs.addMessage(`TRANSFORM: <${event.funcName}> ${event.relPath}`)
+    );
+  }
+});
 
 runtime.on('BROWSER_RELOADED', (event: RuntimeEvent) => {
   delpoyRuntimeError('BROWSER_RELOADED', event.error);
