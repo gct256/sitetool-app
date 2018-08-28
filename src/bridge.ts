@@ -67,6 +67,7 @@ runtime.on('OPENED', async (event: RuntimeEvent) => {
       ui.setOpened(true, config.getRoot(), config.getConfigFile())
     );
     store.dispatch(ui.setMessage(null));
+    store.dispatch(logs.clear());
 
     const configFile = config.getConfigFile();
     if (configFile === null) {
