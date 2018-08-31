@@ -1,42 +1,47 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 
-import { showUrl } from '../utils';
+import { sendToClipboard, showUrl } from '../utils';
 
 interface Props {
-  url: string | null;
+  url: string;
 }
 
 export class Link extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    this.handleClick = this.handleClick.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleCopy = this.handleCopy.bind(this);
   }
 
-  public handleClick() {
+  public handleOpen() {
     const { url } = this.props;
-    if (url !== null) showUrl(url);
+    showUrl(url);
+  }
+
+  public handleCopy() {
+    const { url } = this.props;
+    sendToClipboard(url);
   }
 
   public render() {
     const { url } = this.props;
 
-    if (url === null) {
-      return (
-        <>
-          <button className="button is-small is-link" disabled={true}>
-            (no local server)
-          </button>
-        </>
-      );
-    }
-
     return (
-      <>
-        <button className="button is-small is-link" onClick={this.handleClick}>
-          open {url}
-        </button>
-      </>
+      <p className="link">
+        <a role="button" onClick={this.handleOpen}>
+          <span className="icon">
+            <FontAwesomeIcon icon="external-link-alt" />
+          </span>
+        </a>
+        <a role="button" onClick={this.handleCopy}>
+          <span className="icon">
+            <FontAwesomeIcon icon="clipboard" />
+          </span>
+        </a>
+        <span>{url}</span>
+      </p>
     );
   }
 }

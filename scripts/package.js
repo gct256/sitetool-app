@@ -6,7 +6,7 @@ const rootDir = path.dirname(__dirname);
 
 const commonOptions = {
   dir: path.resolve(rootDir, 'app'),
-  asar: true,
+  asar: false, // imageminがasarでは動かしづらいので
   out: path.resolve(rootDir, 'dist'),
   overwrite: true
 };

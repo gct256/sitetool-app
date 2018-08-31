@@ -13,7 +13,8 @@ if (shouldQuit) {
     mainWindow = new BrowserWindow({
       show: false,
       width: 1024,
-      height: 600
+      height: 600,
+      minHeight: 600
     });
 
     mainWindow.on('ready-to-show', () => {

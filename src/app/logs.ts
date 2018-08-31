@@ -2,7 +2,10 @@ export interface Log {
   message: string;
   error: Error | false;
   time: number;
+  serial: number;
 }
+
+let serial: number = 0;
 
 export namespace logs {
   //// state
@@ -14,9 +17,11 @@ export namespace logs {
 
   //// action creator
   function add(message: string, error: Error | false, time: number) {
+    serial += 1;
+
     return {
       type: ADD,
-      payload: { message, error, time }
+      payload: { message, error, time, serial }
     };
   }
 
@@ -30,8 +35,8 @@ export namespace logs {
   export type Action = ReturnType<typeof add> | ReturnType<typeof clear>;
 
   //// helper
-  export function addMessage(message: string) {
-    return add(message, false, Date.now());
+  export function addMessage(message: string, error: Error | false = false) {
+    return add(message, error, Date.now());
   }
 
   export function addError(error: Error) {

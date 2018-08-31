@@ -56,6 +56,10 @@ export function showUrl(url: string) {
   remote.shell.openExternal(url);
 }
 
+export function sendToClipboard(value: string) {
+  remote.clipboard.writeText(value);
+}
+
 export function acceptFileDrop(
   target: Window | HTMLDocument | HTMLElement,
   callback: (filePaths: string[]) => void

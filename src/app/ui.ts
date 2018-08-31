@@ -1,6 +1,13 @@
 // import { Dispatch, Store } from 'redux';
 import { Status } from '.';
 
+export interface URLSet {
+  local: string;
+  external: string;
+}
+
+export type LogMode = 'error' | 'all';
+
 export namespace ui {
   //// state
   export interface State {
@@ -10,8 +17,10 @@ export namespace ui {
     watcher: Status;
     server: Status;
     port: number | null;
-    urls: Map<string, string> | null;
+    urls: URLSet | null;
     message: string | null;
+    log: boolean;
+    logAll: boolean;
   }
 
   //// action type
@@ -19,6 +28,8 @@ export namespace ui {
   export const SET_WATCHER_STATUS: 'SET_WATCHER_STATUS' = 'SET_WATCHER_STATUS';
   export const SET_SERVER_STATUS: 'SET_SERVER_STATUS' = 'SET_SERVER_STATUS';
   export const SET_MESSAGE: 'SET_MESSAGE' = 'SET_MESSAGE';
+  export const SET_LOG: 'SET_LOG' = 'SET_LOG';
+  export const SET_LOG_ALL: 'SET_LOG_ALL' = 'SET_LOG_ALL';
 
   //// action creator
   export function setOpened(
@@ -42,7 +53,7 @@ export namespace ui {
   export function setServerStatus(
     server: Status,
     port: number | null,
-    urls: Map<string, string> | null
+    urls: URLSet | null
   ) {
     return {
       type: SET_SERVER_STATUS,
@@ -57,12 +68,28 @@ export namespace ui {
     };
   }
 
+  export function setLog(log: boolean) {
+    return {
+      type: SET_LOG,
+      payload: { log }
+    };
+  }
+
+  export function setLogAll(logAll: boolean) {
+    return {
+      type: SET_LOG_ALL,
+      payload: { logAll }
+    };
+  }
+
   //// action
   export type Action =
     | ReturnType<typeof setOpened>
     | ReturnType<typeof setWatcherStatus>
     | ReturnType<typeof setServerStatus>
-    | ReturnType<typeof setMessage>;
+    | ReturnType<typeof setMessage>
+    | ReturnType<typeof setLog>
+    | ReturnType<typeof setLogAll>;
 
   //// reducer
   export function reducer(
@@ -74,7 +101,9 @@ export namespace ui {
       server: 'idle',
       port: null,
       urls: null,
-      message: null
+      message: null,
+      log: false,
+      logAll: false
     },
     action: Action
   ): State {
@@ -109,6 +138,18 @@ export namespace ui {
         const { message } = action.payload;
 
         return message === state.message ? state : { ...state, message };
+      }
+
+      case SET_LOG: {
+        const { log } = action.payload;
+
+        return log === state.log ? state : { ...state, log };
+      }
+
+      case SET_LOG_ALL: {
+        const { logAll } = action.payload;
+
+        return logAll === state.logAll ? state : { ...state, logAll };
       }
 
       default:

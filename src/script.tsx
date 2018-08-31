@@ -2,6 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
+import '@fortawesome/fontawesome';
+import '@fortawesome/fontawesome-free-solid';
+
 import { AppStore } from './app';
 import { getStore } from './bridge';
 import { App } from './components/App';

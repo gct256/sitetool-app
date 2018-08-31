@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AppState } from '../app';
 import { getRuntime } from '../bridge';
 import { showFile } from '../utils';
-import { Link } from './Link';
-import { LogView } from './LogView';
-import { QRCode } from './QRCode';
+import { LinkButtons } from './LinkButtons';
 import { StatusButton } from './StatusButton';
 import { StatusText } from './StatusText';
 
@@ -65,14 +64,14 @@ class RunningClass extends React.Component<Props> {
   }
 
   public render() {
-    const { visible, root, configFile, watcher, server } = this.props;
+    const { visible, root, configFile, watcher, server, urls } = this.props;
 
     if (!visible) return null;
 
     return (
       <div className="section">
         <div className="content">
-          <table>
+          <table className="table">
             <tbody>
               <tr>
                 <th className="is-unselectable">Root Directory</th>
@@ -82,7 +81,10 @@ class RunningClass extends React.Component<Props> {
                     className="button is-small is-fullwidth"
                     onClick={this.handleShowRoot}
                   >
-                    Show
+                    <span className="icon">
+                      <FontAwesomeIcon icon="search" />
+                    </span>
+                    <span>Show</span>
                   </button>
                 </td>
               </tr>
@@ -97,7 +99,10 @@ class RunningClass extends React.Component<Props> {
                     disabled={configFile === null}
                     onClick={this.handleShowConfig}
                   >
-                    Show
+                    <span className="icon">
+                      <FontAwesomeIcon icon="search" />
+                    </span>
+                    <span>Show</span>
                   </button>
                 </td>
               </tr>
@@ -111,16 +116,9 @@ class RunningClass extends React.Component<Props> {
                 </td>
               </tr>
               <tr>
-                <th className="is-unselectable">
-                  <p>Local server</p>
-                  <QRCode url={this.getUrl('external')} />
-                </th>
+                <th className="is-unselectable">Local server</th>
                 <td className="is-unselectable">
-                  <StatusText status={server} />
-                  <div className="buttons">
-                    <Link url={this.getUrl('local')} />
-                    <Link url={this.getUrl('external')} />
-                  </div>
+                  <LinkButtons urls={urls} />
                 </td>
                 <td>
                   <StatusButton status={server} onClick={this.handleServer} />
@@ -129,19 +127,8 @@ class RunningClass extends React.Component<Props> {
             </tbody>
           </table>
         </div>
-        <LogView limit={100} />
       </div>
     );
-  }
-
-  private getUrl(name: string): string | null {
-    const { urls } = this.props;
-
-    if (urls === null) return null;
-
-    const url = urls.get(name);
-
-    return url === undefined ? null : url;
   }
 }
 

@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState } from '../app';
+import { AppDispatch, AppState } from '../app';
+import { recentFiles } from '../app/recentFiles';
 import { getRuntime } from '../bridge';
 import { exists, isDirectory } from '../utils';
 import { RecentFileListItem } from './RecentFileListItem';
 
 function mapStateToProps(state: AppState) {
   return {
-    recentFiles: state.recentFiles,
+    files: state.recentFiles,
     async onSelect(filePath: string) {
-      if (!exists(filePath)) return;
+      if (!(await exists(filePath))) return;
       if (await isDirectory(filePath)) {
         await getRuntime().openDirectory(filePath);
       } else {
@@ -20,16 +21,26 @@ function mapStateToProps(state: AppState) {
   };
 }
 
-type Props = ReturnType<typeof mapStateToProps>;
+function mapDispatchToProps(dispatch: AppDispatch) {
+  return {
+    onRemove(filePath: string) {
+      dispatch(recentFiles.remove(filePath));
+    }
+  };
+}
+
+type Props = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>;
 
 class RecentFileListClass extends React.Component<Props> {
   public render() {
-    const { recentFiles, onSelect } = this.props;
-    const children = recentFiles.map((filePath: string) => (
+    const { files, onSelect, onRemove } = this.props;
+    const children = files.map((filePath: string) => (
       <RecentFileListItem
         key={filePath}
         filePath={filePath}
         onSelect={onSelect}
+        onRemove={onRemove}
       />
     ));
 
@@ -42,4 +53,7 @@ class RecentFileListClass extends React.Component<Props> {
   }
 }
 
-export const RecentFileList = connect(mapStateToProps)(RecentFileListClass);
+export const RecentFileList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RecentFileListClass);

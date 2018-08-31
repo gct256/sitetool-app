@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -50,18 +51,24 @@ class EmptyClass extends React.Component<Props> {
         </div>
         <div className="buttons is-centered">
           <button
-            className="button is-block is-success"
+            className="button is-large is-link"
             type="button"
             onClick={this.handleSelectDirectory}
           >
-            Select directory
+            <span className="icon">
+              <FontAwesomeIcon icon="folder" />
+            </span>
+            <span>Select directory</span>
           </button>
           <button
-            className="button is-block is-success"
+            className="button is-large is-link"
             type="button"
             onClick={this.handleSelectConfigFile}
           >
-            Select config file
+            <span className="icon">
+              <FontAwesomeIcon icon="file" />
+            </span>
+            <span>Select config file</span>
           </button>
         </div>
         <hr />

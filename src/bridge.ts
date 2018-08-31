@@ -39,9 +39,8 @@ const runtime: Runtime = new Runtime();
 function delpoyRuntimeError(eventType: string, error: Error | false): boolean {
   if (error !== false) {
     store.dispatch(logs.addError(error));
-  } else {
-    store.dispatch(logs.addMessage(eventType));
   }
+  store.dispatch(logs.addMessage(eventType, error));
 
   return error !== false;
 }
@@ -49,9 +48,10 @@ function delpoyRuntimeError(eventType: string, error: Error | false): boolean {
 function deployFileEvent(eventType: string, event: FileEvent) {
   if (event.error !== false) {
     store.dispatch(logs.addError(event.error));
-  } else {
-    store.dispatch(logs.addMessage(`${eventType}: ${event.relPath}`));
   }
+  store.dispatch(
+    logs.addMessage(`${eventType}: ${event.relPath}`, event.error)
+  );
 }
 
 runtime.on('OPENING', (event: RuntimeEvent) => {
@@ -128,7 +128,13 @@ runtime.on('SERVER_STARTING', (event: RuntimeEvent) => {
 
 runtime.on('SERVER_STARTED', (event: ServerStartedEvent) => {
   if (!delpoyRuntimeError('SERVER_STARTED', event.error)) {
-    store.dispatch(ui.setServerStatus('running', event.port, event.urls));
+    const local = event.urls.get('local');
+    const external = event.urls.get('external');
+    const urls =
+      local !== undefined && external !== undefined
+        ? { local, external }
+        : null;
+    store.dispatch(ui.setServerStatus('running', event.port, urls));
   }
 });
 
@@ -197,11 +203,13 @@ runtime.on('WRITE_FILE', (event: FileEvent) => {
 runtime.on('TRANSFORM', (event: TransformEvent) => {
   if (event.error !== false) {
     store.dispatch(logs.addError(event.error));
-  } else {
-    store.dispatch(
-      logs.addMessage(`TRANSFORM: <${event.funcName}> ${event.relPath}`)
-    );
   }
+  store.dispatch(
+    logs.addMessage(
+      `TRANSFORM: <${event.funcName}> ${event.relPath}`,
+      event.error
+    )
+  );
 });
 
 runtime.on('BROWSER_RELOADED', (event: RuntimeEvent) => {

@@ -56,10 +56,7 @@ export namespace recentFiles {
         const index = state.indexOf(filePath);
         if (index < 0) return state;
 
-        const result = [...state];
-        result.splice(index, 1);
-
-        return result;
+        return state.filter((x: string) => x !== filePath);
       }
 
       case RESTORE: {
