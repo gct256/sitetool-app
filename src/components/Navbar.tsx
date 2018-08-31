@@ -1,6 +1,7 @@
+import { remote } from 'electron';
 import * as React from 'react';
-
 import { connect } from 'react-redux';
+
 import { AppDispatch, AppState } from '../app';
 import { Log } from '../app/logs';
 import { ui } from '../app/ui';
@@ -36,6 +37,14 @@ type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 class NavbarClass extends React.Component<Props> {
+  public componentWillMount() {
+    this.updateBadge();
+  }
+
+  public componentDidUpdate() {
+    this.updateBadge();
+  }
+
   public render() {
     const {
       opened,
@@ -93,6 +102,15 @@ class NavbarClass extends React.Component<Props> {
         </div>
       </div>
     );
+  }
+
+  private updateBadge() {
+    const { errorCount } = this.props;
+    if (errorCount > 0) {
+      remote.app.setBadgeCount(errorCount);
+    } else {
+      remote.app.setBadgeCount(0);
+    }
   }
 }
 

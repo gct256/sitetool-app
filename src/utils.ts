@@ -60,6 +60,15 @@ export function sendToClipboard(value: string) {
   remote.clipboard.writeText(value);
 }
 
+export function notifyError(message: string, callback: () => void) {
+  const nf = new remote.Notification({
+    title: 'sitetool',
+    body: message
+  });
+  nf.on('click', callback);
+  nf.show();
+}
+
 export function acceptFileDrop(
   target: Window | HTMLDocument | HTMLElement,
   callback: (filePaths: string[]) => void

@@ -21,7 +21,7 @@ import { AppStore, appReducer } from './app';
 import { logs } from './app/logs';
 import { recentFiles } from './app/recentFiles';
 import { ui } from './app/ui';
-import { acceptFileDrop, showFile } from './utils';
+import { acceptFileDrop, notifyError, showFile } from './utils';
 
 const persistConfig: PersistConfig = {
   key: 'recentFiles',
@@ -202,6 +202,9 @@ runtime.on('WRITE_FILE', (event: FileEvent) => {
 // SKIP_FILE: FileEvent;
 runtime.on('TRANSFORM', (event: TransformEvent) => {
   if (event.error !== false) {
+    notifyError(`Transform error occured. see Sitetool's log.`, () => {
+      store.dispatch(ui.setLog(true));
+    });
     store.dispatch(logs.addError(event.error));
   }
   store.dispatch(
