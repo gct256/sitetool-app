@@ -66,7 +66,7 @@ runtime.on('OPENED', async (event: RuntimeEvent) => {
     store.dispatch(
       ui.setOpened(true, config.getRoot(), config.getConfigFile())
     );
-    store.dispatch(ui.setMessage(null));
+    // store.dispatch(ui.setMessage(null));
     store.dispatch(logs.clear());
 
     const configFile = config.getConfigFile();
@@ -202,9 +202,7 @@ runtime.on('WRITE_FILE', (event: FileEvent) => {
 // SKIP_FILE: FileEvent;
 runtime.on('TRANSFORM', (event: TransformEvent) => {
   if (event.error !== false) {
-    notifyError(`Transform error occured. see Sitetool's log.`, () => {
-      store.dispatch(ui.setLog(true));
-    });
+    notifyError(`Transform error occured. see Sitetool's log.`);
     store.dispatch(logs.addError(event.error));
   }
   store.dispatch(

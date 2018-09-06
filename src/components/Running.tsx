@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AppState } from '../app';
 import { getRuntime } from '../bridge';
-import { showFile } from '../utils';
-import { LinkButtons } from './LinkButtons';
-import { StatusButton } from './StatusButton';
-import { StatusText } from './StatusText';
+import { sendToClipboard, showFile } from '../utils';
+import { ConfigFile } from './ConfigFile';
+import { RootDirectory } from './RootDirectory';
+import { StatusField } from './StatusField';
+import { URLField } from './URLField';
 
 function mapStateToProps(state: AppState) {
   return {
@@ -27,9 +27,19 @@ class RunningClass extends React.Component<Props> {
     super(props);
 
     this.handleShowRoot = this.handleShowRoot.bind(this);
+    this.handleCopyRoot = this.handleCopyRoot.bind(this);
+
     this.handleShowConfig = this.handleShowConfig.bind(this);
-    this.handleWatcher = this.handleWatcher.bind(this);
-    this.handleServer = this.handleServer.bind(this);
+    this.handleCopyConfig = this.handleCopyConfig.bind(this);
+    this.handleGenerateConfig = this.handleGenerateConfig.bind(this);
+
+    this.handleWatcherPause = this.handleWatcherPause.bind(this);
+    this.handleWatcherResume = this.handleWatcherResume.bind(this);
+    this.handleWatcherRestart = this.handleWatcherRestart.bind(this);
+
+    this.handleServerPause = this.handleServerPause.bind(this);
+    this.handleServerResume = this.handleServerResume.bind(this);
+    this.handleServerRestart = this.handleServerRestart.bind(this);
   }
 
   public handleShowRoot() {
@@ -40,29 +50,59 @@ class RunningClass extends React.Component<Props> {
     );
   }
 
+  public handleCopyRoot() {
+    sendToClipboard(
+      getRuntime()
+        .getConfig()
+        .getRoot()
+    );
+  }
+
   public handleShowConfig() {
-    const configFile = getRuntime()
-      .getConfig()
-      .getConfigFile();
-    if (configFile !== null) showFile(configFile);
+    showFile(
+      getRuntime()
+        .getConfig()
+        .getConfigFile()
+    );
   }
 
-  public handleWatcher() {
-    if (this.props.watcher === 'idle') {
-      getRuntime().startWatcher();
-    } else if (this.props.watcher === 'running') {
-      getRuntime().stopWatcher();
-    }
+  public handleCopyConfig() {
+    sendToClipboard(
+      getRuntime()
+        .getConfig()
+        .getConfigFile()
+    );
   }
 
-  public handleServer() {
-    if (this.props.server === 'idle') {
-      getRuntime().startServer();
-    } else if (this.props.server === 'running') {
-      getRuntime().stopServer();
-    }
+  public handleGenerateConfig() {
+    //
   }
 
+  public handleWatcherPause() {
+    getRuntime().stopWatcher();
+  }
+
+  public handleWatcherResume() {
+    getRuntime().startWatcher();
+  }
+
+  public handleWatcherRestart() {
+    //
+  }
+
+  public handleServerPause() {
+    getRuntime().stopServer();
+  }
+
+  public handleServerResume() {
+    getRuntime().startServer();
+  }
+
+  public handleServerRestart() {
+    //
+  }
+
+  // tslint:disable-next-line:max-func-body-length
   public render() {
     const { visible, root, configFile, watcher, server, urls } = this.props;
 
@@ -70,63 +110,37 @@ class RunningClass extends React.Component<Props> {
 
     return (
       <div className="section">
-        <div className="content">
-          <table className="table">
-            <tbody>
-              <tr>
-                <th className="is-unselectable">Root Directory</th>
-                <td className="is-unselectable file-path">{root}</td>
-                <td>
-                  <button
-                    className="button is-small is-fullwidth"
-                    onClick={this.handleShowRoot}
-                  >
-                    <span className="icon">
-                      <FontAwesomeIcon icon="search" />
-                    </span>
-                    <span>Show</span>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="is-unselectable">Config file</th>
-                <td className="is-unselectable file-path">
-                  {configFile === null ? '(no config)' : configFile}
-                </td>
-                <td>
-                  <button
-                    className="button is-small is-fullwidth"
-                    disabled={configFile === null}
-                    onClick={this.handleShowConfig}
-                  >
-                    <span className="icon">
-                      <FontAwesomeIcon icon="search" />
-                    </span>
-                    <span>Show</span>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="is-unselectable">File watcher</th>
-                <td className="is-unselectable">
-                  <StatusText status={watcher} />
-                </td>
-                <td>
-                  <StatusButton status={watcher} onClick={this.handleWatcher} />
-                </td>
-              </tr>
-              <tr>
-                <th className="is-unselectable">Local server</th>
-                <td className="is-unselectable">
-                  <LinkButtons urls={urls} />
-                </td>
-                <td>
-                  <StatusButton status={server} onClick={this.handleServer} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <RootDirectory
+          filePath={root}
+          show={this.handleShowRoot}
+          copy={this.handleCopyRoot}
+        />
+        <ConfigFile
+          filePath={configFile}
+          show={this.handleShowConfig}
+          copy={this.handleCopyConfig}
+          generate={this.handleGenerateConfig}
+        />
+        <StatusField
+          label="File watcher"
+          status={watcher}
+          pause={this.handleWatcherPause}
+          resume={this.handleWatcherResume}
+          restart={this.handleWatcherRestart}
+        />
+        <StatusField
+          label="Local server"
+          status={server}
+          pause={this.handleServerPause}
+          resume={this.handleServerResume}
+          restart={this.handleServerRestart}
+        />
+        <hr />
+        <URLField label="URL (local)" url={urls !== null ? urls.local : null} />
+        <URLField
+          label="URL (local)"
+          url={urls !== null ? urls.external : null}
+        />
       </div>
     );
   }

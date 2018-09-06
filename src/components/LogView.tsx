@@ -9,17 +9,14 @@ import { LogViewItem } from './LogViewItem';
 
 function mapStateToProps(state: AppState) {
   return {
+    opened: state.ui.opened,
     logArray: state.logs,
-    log: state.ui.log,
     logAll: state.ui.logAll
   };
 }
 
 function mapDispatchToProps(dispatch: AppDispatch) {
   return {
-    hideLog() {
-      dispatch(ui.setLog(false));
-    },
     errorOnly() {
       dispatch(ui.setLogAll(false));
     },
@@ -39,9 +36,9 @@ type Props = ReturnType<typeof mapStateToProps> &
 
 class LogViewClass extends React.Component<Props> {
   public render() {
-    const { logArray, log, logAll, limit, hideLog, clearLog } = this.props;
+    const { opened, logArray, logAll, limit, clearLog } = this.props;
 
-    if (!log) return null;
+    if (!opened) return null;
 
     const reverseLogs = (logAll
       ? logArray
@@ -55,32 +52,17 @@ class LogViewClass extends React.Component<Props> {
 
     return (
       <>
-        <div className="log-view-background" />
-        <div className="box log-view is-paddingless is-radiusless">
-          <div className="navbar is-small is-info">
-            <div className="navbar-menu">
-              <div className="navbar-end">
-                <div className="navbar-item">
-                  <div className="buttons">
-                    {this.renderLogModeButton()}
-                    <button
-                      className="button is-small is-outlined is-white"
-                      onClick={clearLog}
-                    >
-                      <span className="icon">
-                        <FontAwesomeIcon icon="ban" />
-                      </span>
-                      <span>Clear</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="navbar-item">
-                  <button className="delete" onClick={hideLog} />
-                </div>
-              </div>
-            </div>
+        <div className="lower box is-radiusless">
+          <div className="log-view">{children}</div>
+          <div className="log-buttons buttons">
+            {this.renderLogModeButton()}
+            <button className="button is-light is-small" onClick={clearLog}>
+              <span className="icon">
+                <FontAwesomeIcon icon="ban" />
+              </span>
+              <span>Clear</span>
+            </button>
           </div>
-          <div className="log-view-body">{children}</div>
         </div>
       </>
     );
@@ -91,13 +73,13 @@ class LogViewClass extends React.Component<Props> {
 
     return (
       <button
-        className="button is-small is-outlined is-white"
+        className={`button is-light is-small ${logAll ? '' : 'is-inverted'}`}
         onClick={logAll ? errorOnly : allLog}
       >
         <span className="icon">
           <FontAwesomeIcon icon="filter" />
         </span>
-        <span>{logAll ? 'show error only' : 'show all log'}</span>
+        <span>Error only</span>
       </button>
     );
   }

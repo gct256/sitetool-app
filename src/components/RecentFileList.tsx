@@ -46,8 +46,10 @@ class RecentFileListClass extends React.Component<Props> {
 
     return (
       <>
-        <p className="title is-size-4">Recent files</p>
-        {children}
+        <div className="box is-radiusless recent-file-list">
+          <p className="title is-size-4">Recent files</p>
+          {children}
+        </div>
       </>
     );
   }

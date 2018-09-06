@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { Status } from '../app';
-import { showUrl } from '../utils';
 
 type Props = {
   status: Status;
-  link?: string;
 };
 
 const labels: { [key: string]: string } = {
-  idle: 'Idle',
-  startup: 'Start up ...',
-  running: 'Running',
-  shutdown: 'Shutdown ...'
+  idle: 'idle',
+  startup: 'start up ...',
+  running: 'running',
+  shutdown: 'shutdown ...'
 };
 
 const colors: { [key: string]: string } = {
@@ -21,36 +19,11 @@ const colors: { [key: string]: string } = {
   shutdown: 'warning'
 };
 
-export class StatusText extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  public handleClick() {
-    const { link } = this.props;
-
-    if (link !== undefined && link.length > 0) showUrl(link);
-  }
-
-  public render() {
-    const { status } = this.props;
-
-    return <p className={`has-color-${colors[status]}`}>{this.renderLink()}</p>;
-  }
-
-  private renderLink() {
-    const { status, link } = this.props;
-
-    if (link === undefined || link.length === 0) {
-      return <span>{labels[status]}</span>;
-    }
-
-    return (
-      <a role="button" onClick={this.handleClick}>
-        {labels[status]}
-      </a>
-    );
-  }
-}
+export const StatusText: React.SFC<Props> = ({ status }: Props) => (
+  <input
+    type="text"
+    readOnly={true}
+    className={`input is-static is-small has-text-${colors[status]}`}
+    value={labels[status]}
+  />
+);

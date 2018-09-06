@@ -43,37 +43,40 @@ class EmptyClass extends React.Component<Props> {
     if (!visible) return null;
 
     return (
-      <div className="section">
-        <div className="notification">
-          <p className="is-unselectable">
-            Select or drag-drop directory or config file (sitetool.config.js)
-          </p>
+      <>
+        <div className="section">
+          <div className="notification">
+            <p className="is-unselectable">
+              Select or drag-drop directory or config file (sitetool.config.js)
+            </p>
+          </div>
+          <div className="buttons is-centered">
+            <button
+              className="button is-link"
+              type="button"
+              onClick={this.handleSelectDirectory}
+            >
+              <span className="icon">
+                <FontAwesomeIcon icon="folder" />
+              </span>
+              <span>Select directory</span>
+            </button>
+            <button
+              className="button is-link"
+              type="button"
+              onClick={this.handleSelectConfigFile}
+            >
+              <span className="icon">
+                <FontAwesomeIcon icon="file" />
+              </span>
+              <span>Select config file</span>
+            </button>
+          </div>
         </div>
-        <div className="buttons is-centered">
-          <button
-            className="button is-large is-link"
-            type="button"
-            onClick={this.handleSelectDirectory}
-          >
-            <span className="icon">
-              <FontAwesomeIcon icon="folder" />
-            </span>
-            <span>Select directory</span>
-          </button>
-          <button
-            className="button is-large is-link"
-            type="button"
-            onClick={this.handleSelectConfigFile}
-          >
-            <span className="icon">
-              <FontAwesomeIcon icon="file" />
-            </span>
-            <span>Select config file</span>
-          </button>
+        <div className="section">
+          <RecentFileList />
         </div>
-        <hr />
-        <RecentFileList />
-      </div>
+      </>
     );
   }
 }

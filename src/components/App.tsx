@@ -7,12 +7,12 @@ import { Running } from './Running';
 
 export const App: React.SFC = () => (
   <>
+    <Message />
     <Navbar />
     <div className="main">
       <Empty />
       <Running />
     </div>
     <LogView limit={500} />
-    <Message />
   </>
 );

@@ -11,10 +11,10 @@ if (shouldQuit) {
 } else {
   app.on('ready', () => {
     mainWindow = new BrowserWindow({
-      show: false,
-      width: 1024,
-      height: 600,
-      minHeight: 600
+      show: true,
+      width: 800,
+      height: 700,
+      minHeight: 700
     });
 
     mainWindow.on('ready-to-show', () => {

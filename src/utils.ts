@@ -42,7 +42,11 @@ export function openSelectConfig(): Promise<string | null> {
   });
 }
 
-export function showFile(dirPath: string, forceShow: boolean = false) {
+export function showFile(
+  dirPath: string | null | undefined,
+  forceShow: boolean = false
+) {
+  if (dirPath === null || dirPath === undefined) return;
   if (!fs.existsSync(dirPath)) return;
 
   if (fs.statSync(dirPath).isDirectory() && !forceShow) {
@@ -52,20 +56,21 @@ export function showFile(dirPath: string, forceShow: boolean = false) {
   }
 }
 
-export function showUrl(url: string) {
-  remote.shell.openExternal(url);
+export function showUrl(url: string | null | undefined) {
+  if (url !== null && url !== undefined) remote.shell.openExternal(url);
 }
 
-export function sendToClipboard(value: string) {
-  remote.clipboard.writeText(value);
+export function sendToClipboard(value: string | null | undefined) {
+  if (value !== null && value !== undefined) remote.clipboard.writeText(value);
 }
 
-export function notifyError(message: string, callback: () => void) {
+export function notifyError(message: string, callback?: () => void) {
   const nf = new remote.Notification({
     title: 'sitetool',
-    body: message
+    body: message,
+    silent: true
   });
-  nf.on('click', callback);
+  if (callback) nf.on('click', callback);
   nf.show();
 }
 

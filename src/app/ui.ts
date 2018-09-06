@@ -19,7 +19,6 @@ export namespace ui {
     port: number | null;
     urls: URLSet | null;
     message: string | null;
-    log: boolean;
     logAll: boolean;
   }
 
@@ -28,7 +27,6 @@ export namespace ui {
   export const SET_WATCHER_STATUS: 'SET_WATCHER_STATUS' = 'SET_WATCHER_STATUS';
   export const SET_SERVER_STATUS: 'SET_SERVER_STATUS' = 'SET_SERVER_STATUS';
   export const SET_MESSAGE: 'SET_MESSAGE' = 'SET_MESSAGE';
-  export const SET_LOG: 'SET_LOG' = 'SET_LOG';
   export const SET_LOG_ALL: 'SET_LOG_ALL' = 'SET_LOG_ALL';
 
   //// action creator
@@ -68,13 +66,6 @@ export namespace ui {
     };
   }
 
-  export function setLog(log: boolean) {
-    return {
-      type: SET_LOG,
-      payload: { log }
-    };
-  }
-
   export function setLogAll(logAll: boolean) {
     return {
       type: SET_LOG_ALL,
@@ -88,7 +79,6 @@ export namespace ui {
     | ReturnType<typeof setWatcherStatus>
     | ReturnType<typeof setServerStatus>
     | ReturnType<typeof setMessage>
-    | ReturnType<typeof setLog>
     | ReturnType<typeof setLogAll>;
 
   //// reducer
@@ -102,7 +92,6 @@ export namespace ui {
       port: null,
       urls: null,
       message: null,
-      log: false,
       logAll: false
     },
     action: Action
@@ -138,12 +127,6 @@ export namespace ui {
         const { message } = action.payload;
 
         return message === state.message ? state : { ...state, message };
-      }
-
-      case SET_LOG: {
-        const { log } = action.payload;
-
-        return log === state.log ? state : { ...state, log };
       }
 
       case SET_LOG_ALL: {

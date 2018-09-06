@@ -2,9 +2,8 @@ import { remote } from 'electron';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppDispatch, AppState } from '../app';
+import { AppState } from '../app';
 import { Log } from '../app/logs';
-import { ui } from '../app/ui';
 import { getRuntime } from '../bridge';
 import { NavbarButton } from './NavbarButton';
 
@@ -25,16 +24,7 @@ function mapStateToProps(state: AppState) {
   };
 }
 
-function mapDispatchToProps(dispatch: AppDispatch) {
-  return {
-    showLog() {
-      dispatch(ui.setLog(true));
-    }
-  };
-}
-
-type Props = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps>;
+type Props = ReturnType<typeof mapStateToProps>;
 
 class NavbarClass extends React.Component<Props> {
   public componentWillMount() {
@@ -46,34 +36,33 @@ class NavbarClass extends React.Component<Props> {
   }
 
   public render() {
-    const {
-      opened,
-      close,
-      clean,
-      distribute,
-      errorCount,
-      showLog
-    } = this.props;
+    const { opened, close, clean, distribute } = this.props;
+
+    if (!opened) {
+      return (
+        <div className="navbar is-success">
+          <div className="navbar-item">
+            <h1 className="title has-text-white is-size-4">sitetool.app</h1>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="navbar is-success">
-        <div className="navbar-brand">
-          <div className="navbar-item">
-            <h1 className="title has-text-white is-unselectable">sitetool</h1>
-          </div>
-        </div>
         <div className="navbar-menu">
-          <div className="navbar-end">
+          <div className="navbar-start">
             <div className="navbar-item">
               <NavbarButton
                 disabled={false}
-                count={errorCount}
-                icon="file-alt"
-                onClick={showLog}
+                icon="chevron-left"
+                onClick={close}
               >
-                Log
+                Back
               </NavbarButton>
             </div>
+          </div>
+          <div className="navbar-end">
             <div className="navbar-item">
               <div className="buttons has-addons">
                 <NavbarButton
@@ -87,16 +76,6 @@ class NavbarClass extends React.Component<Props> {
                   Clean
                 </NavbarButton>
               </div>
-            </div>
-            <div className="navbar-item">
-              <NavbarButton
-                disabled={!opened}
-                icon="times"
-                white={true}
-                onClick={close}
-              >
-                Close
-              </NavbarButton>
             </div>
           </div>
         </div>
@@ -114,7 +93,4 @@ class NavbarClass extends React.Component<Props> {
   }
 }
 
-export const Navbar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NavbarClass);
+export const Navbar = connect(mapStateToProps)(NavbarClass);

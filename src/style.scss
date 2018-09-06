@@ -9,51 +9,34 @@ body {
   overflow: hidden;
 }
 
-th,
-td {
-  white-space: nowrap;
-}
-
 .link span:not(.icon) {
   vertical-align: top;
 }
 
-.main {
+.lower {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 3.25rem;
-  bottom: 300px;
-}
-
-.log-view-background {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: $modal-background-background-color;
-  z-index: $modal-z - 1;
+  left: 8px;
+  right: 8px;
+  top: 400px;
+  bottom: 8px;
 }
 
 .log-view {
   position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
-  top: 0.5rem;
-  bottom: 0.5rem;
-  z-index: $modal-z - 1;
-}
-
-.log-view-body {
-  position: absolute;
   left: 0;
   right: 0;
-  top: 3.75rem;
-  bottom: 0;
-  padding: 0.5rem;
+  top: 0;
+  bottom: calc(2.25rem + 8px);
+  padding: 4px;
   overflow-x: hidden;
   overflow-y: scroll;
+  border-bottom: 1px solid $border;
+}
+
+.log-buttons {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
 }
 
 .message-modal {
@@ -77,6 +60,16 @@ td {
   font-family: 'Menlo', 'Consolas', monospace;
 }
 
+.recent-file-list {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 250px;
+  bottom: 8px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
 .recent-file-list-item {
   display: flex;
   padding: 0.5em;
@@ -92,4 +85,8 @@ td {
 
 .log-view-item {
   font-size: 12px;
+}
+
+.running-buttons .button {
+  width: 80px;
 }
