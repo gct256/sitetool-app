@@ -6,6 +6,6 @@
   "license": "MIT",
   "main": "main.js",
   "dependencies": {
-    "@gct256/sitetool": "^1.5.0"
+    "@gct256/sitetool": "^1.6.0"
   }
 }
