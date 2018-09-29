@@ -2,8 +2,8 @@ import { remote } from 'electron';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState } from '../app';
-import { Log } from '../app/logs';
+import { AppDispatch, AppState } from '../app';
+import { Log, logs } from '../app/logs';
 import { getRuntime } from '../bridge';
 import { NavbarButton } from './NavbarButton';
 
@@ -13,18 +13,26 @@ function mapStateToProps(state: AppState) {
     close() {
       getRuntime().close();
     },
-    async clean() {
-      await getRuntime().clean();
-      getRuntime().build();
-    },
-    distribute() {
-      getRuntime().distribute();
-    },
     errorCount: state.logs.filter((x: Log) => x.error !== false).length
   };
 }
 
-type Props = ReturnType<typeof mapStateToProps>;
+function mapDispatchToProps(dispatch: AppDispatch) {
+  return {
+    async clean() {
+      await getRuntime().clean();
+      dispatch(logs.clear());
+      getRuntime().build();
+    },
+    distribute() {
+      dispatch(logs.clear());
+      getRuntime().distribute();
+    }
+  };
+}
+
+type Props = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>;
 
 class NavbarClass extends React.Component<Props> {
   public componentWillMount() {
@@ -93,4 +101,7 @@ class NavbarClass extends React.Component<Props> {
   }
 }
 
-export const Navbar = connect(mapStateToProps)(NavbarClass);
+export const Navbar = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavbarClass);
