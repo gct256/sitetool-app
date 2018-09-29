@@ -6,6 +6,7 @@ import {
   ServerStartedEvent,
   TransformEvent
 } from '@gct256/sitetool';
+import * as debounce from 'debounce';
 import * as fs from 'fs';
 import { applyMiddleware, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
@@ -157,6 +158,9 @@ runtime.on('BUILDING', (event: RuntimeEvent) => {
 });
 
 runtime.on('BUILT', (event: RuntimeEvent) => {
+  if (event.error !== false) {
+    notifyError(`Error occured. see Sitetool's log.`);
+  }
   if (!delpoyRuntimeError('BUILT', event.error)) {
     store.dispatch(ui.setMessage(null));
   }
@@ -181,6 +185,9 @@ runtime.on('DISTRIBUTING', (event: RuntimeEvent) => {
 });
 
 runtime.on('DISTRIBUTED', (event: DistributeEvent) => {
+  if (event.error !== false) {
+    notifyError(`Error occured. see Sitetool's log.`);
+  }
   if (!delpoyRuntimeError('DISTRIBUTED', event.error)) {
     store.dispatch(ui.setMessage(null));
     showFile(event.dirPath, true);
@@ -200,9 +207,14 @@ runtime.on('WRITE_FILE', (event: FileEvent) => {
 });
 
 // SKIP_FILE: FileEvent;
+
+const transformErrorHandler = debounce(() => {
+  notifyError(`Error occured. see Sitetool's log.`);
+}, 500);
+
 runtime.on('TRANSFORM', (event: TransformEvent) => {
   if (event.error !== false) {
-    notifyError(`Transform error occured. see Sitetool's log.`);
+    transformErrorHandler();
     store.dispatch(logs.addError(event.error));
   }
   store.dispatch(

@@ -72,6 +72,8 @@ export function notifyError(message: string, callback?: () => void) {
   });
   if (callback) nf.on('click', callback);
   nf.show();
+
+  remote.app.dock.bounce('critical');
 }
 
 export function acceptFileDrop(
