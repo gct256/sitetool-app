@@ -12,9 +12,9 @@ if (shouldQuit) {
   app.on('ready', () => {
     mainWindow = new BrowserWindow({
       show: true,
-      width: 800,
-      height: 700,
-      minHeight: 700
+      width: 1000,
+      height: 600,
+      minHeight: 600
     });
 
     mainWindow.on('ready-to-show', () => {
