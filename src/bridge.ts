@@ -7,6 +7,7 @@ import {
   TransformEvent
 } from '@gct256/sitetool';
 import * as debounce from 'debounce';
+import * as electronIsDev from 'electron-is-dev';
 import * as fs from 'fs';
 import { applyMiddleware, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
@@ -30,10 +31,10 @@ const persistConfig: PersistConfig = {
   whitelist: ['recentFiles']
 };
 const persistedReducer = persistReducer(persistConfig, appReducer);
-const store: AppStore = createStore(
-  persistedReducer,
-  applyMiddleware(createLogger())
-);
+const store: AppStore = electronIsDev
+  ? createStore(persistedReducer, applyMiddleware(createLogger()))
+  : createStore(persistedReducer);
+
 const persister = persistStore(store);
 const runtime: Runtime = new Runtime();
 
