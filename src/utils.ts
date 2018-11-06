@@ -98,6 +98,8 @@ export function acceptFileDrop(
         return;
       }
 
+      if (ev.dataTransfer === null) return;
+
       const items = ev.dataTransfer.items;
       const filePaths: string[] = [];
       // tslint:disable-next-line:prefer-for-of
